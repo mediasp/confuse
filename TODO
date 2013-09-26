@@ -1,0 +1,4 @@
+* Make the :type attriute for a config item actually do something. (e.g.some
+    basic type checking)
+* Fix namespaces overwriting each other instead of merging.
+* Write some more tests
