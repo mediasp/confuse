@@ -1,6 +1,5 @@
 require 'configuration/config'
 require 'configuration/configurable'
-require 'singleton'
 
 module ExampeConfig
   extend Configuration::ConfigMixin
