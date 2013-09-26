@@ -1,4 +1,4 @@
-require 'configuration/config'
+require 'configuration'
 
 class ExampleConfig < Configuration::ConfigBase
   define :foo do

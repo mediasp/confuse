@@ -1,7 +1,6 @@
-require 'configuration/config'
 require 'configuration/configurable'
 
-module ExampeConfig
+module ExampleConfig
   extend Configuration::ConfigMixin
   extend Configuration::DSL
 

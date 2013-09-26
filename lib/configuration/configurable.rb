@@ -1,4 +1,4 @@
-require 'configuration/dsl'
+require 'configuration'
 
 # Monkey patch class to easily allow a class to be configurable.
 class Class
