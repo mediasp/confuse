@@ -5,6 +5,10 @@ module Configuration
   module DSL
     attr_reader :configured_by
 
+    def configured_by(config = Config)
+      @configured_by ||= config
+    end
+
     def default_namespace(namespace = :default)
       @default_namespace ||= namespace
     end
@@ -22,7 +26,7 @@ module Configuration
 
     def define(name, &block)
       namespaces[default_namespace].define(name, &block)
-      getter(name, default_namespace)
+      getter(name)
     end
 
     def namespace(name, &block)
@@ -35,10 +39,10 @@ module Configuration
       getter(name)
     end
 
-    def getter(name, namespace = :default)
+    def getter(name)
       class_eval do
         define_method(name) do
-          config[namespace][name]
+          config[name]
         end
       end
     end
