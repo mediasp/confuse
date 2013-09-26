@@ -26,7 +26,7 @@ module Configuration
 
     def define(name, &block)
       namespaces[default_namespace].define(name, &block)
-      getter(name)
+      getter(name, default_namespace)
     end
 
     def namespace(name, &block)
@@ -39,10 +39,16 @@ module Configuration
       getter(name)
     end
 
-    def getter(name)
+    def getter(name, namespace = nil)
       class_eval do
-        define_method(name) do
-          config[name]
+        if namespace.nil?
+          define_method(name) do
+            config[name]
+          end
+        else
+          define_method(name) do
+            config[namespace][name]
+          end
         end
       end
     end
