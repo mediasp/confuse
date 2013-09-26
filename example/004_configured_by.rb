@@ -3,7 +3,8 @@ require 'configuration/configurable'
 require 'singleton'
 
 module ExampeConfig
-  extend Configuration::Config
+  extend Configuration::ConfigMixin
+  extend Configuration::DSL
 
   define :conf do
     default 2
