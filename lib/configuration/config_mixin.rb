@@ -10,7 +10,10 @@ module Configuration
     end
 
     def load_namespaces(new_namespaces)
-      namespaces.merge!(new_namespaces)
+      new_namespaces.each { |key, value|
+	existing = namespaces[key]
+	existing ? existing.merge!(value) : namespaces[key] = value
+      }
     end
 
     def read_files(file_paths)

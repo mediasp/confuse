@@ -30,7 +30,7 @@ module Configuration
     end
 
     def [](key)
-      get_item(key).value
+      (i = get_item(key)) && i.value
     end
 
     def []=(key, value)

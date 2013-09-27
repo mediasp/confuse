@@ -1,12 +1,16 @@
 require 'minitest/autorun'
-require 'configuration/config'
+require 'configuration'
 
 # Test instance methods
-class TestInstanceMethods < MiniTest::Unit::TestCase
-
+class TestConfig < MiniTest::Unit::TestCase
   def setup
+    namespace = Configuration::Namespace.new do
+      define :baz do
+        default 1
+      end
+    end
     @config = Configuration::Config
-    @config.load_namespaces({ :foo_bar => true })
+    @config.load_namespaces({ :foo_bar => namespace })
   end
 
   def test_find_namespace
@@ -29,4 +33,18 @@ class TestInstanceMethods < MiniTest::Unit::TestCase
     assert_equal :bar, @config.rest_of_key(:bar, :default)
   end
 
+  def test_load_namespaces
+    namespace = Configuration::Namespace.new do
+      define :foo do
+        default 1
+      end
+    end
+
+    @config.load_namespaces({ :foo_bar => namespace })
+
+    assert @config[:foo_bar][:foo]
+    assert @config[:foo_bar][:baz]
+  end
+
 end
+
