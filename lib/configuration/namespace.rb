@@ -5,11 +5,12 @@ module Configuration
   # rest of the config.
   class Namespace
 
-    attr_reader :items, :error_level
+    attr_reader :items, :supress_warnings_flag, :strict_flag
 
     def initialize(&block)
       @items = {}
-      @error_level = 0
+      @supress_warnings = false
+      @strict = false
       instance_eval(&block)
     end
 
@@ -17,16 +18,12 @@ module Configuration
       @items[name] = ConfigItem.new(name, &block)
     end
 
-    # This is really ugly.
-    # TODO: don't use magic numbers.
     def supress_warnings
-      raise 'Cannot supress warnings while in strict mode' if @error_level > 0
-      @error_level = -1
+      @supress_warnings_flag = true
     end
 
     def strict
-      raise 'Cannot supress warnings while in strict mode' if @error_level < 0
-      @error_level = 1
+      @strict_flag = true
     end
 
     def [](key)
@@ -34,22 +31,15 @@ module Configuration
     end
 
     def []=(key, value)
-      item = get_item(key)
-      unless item
-        warn(key)
-        item = ConfigItem.new(key, &(Proc.new {}))
-      end
-      item.value = value
+      item = get_item(key) || create_new_key(key, value)
+      item && item.value = value
     end
 
-    def warn(key)
-      message = "config includes unknown option '#{key}'"
-      if error_level == 0
-        puts "Warning: #{message}"
-      elsif error_level > 0
-        puts "Error: #{message}"
-        exit
+    def create_new_key(key, value)
+      if @supress_warnings_flag
+        puts "Warning: config includes unknown option '#{key}'"
       end
+      @items[key] = ConfigItem.new(key, &(Proc.new {})) unless @strict_flag
     end
 
     def get_item(key)
@@ -57,7 +47,8 @@ module Configuration
     end
 
     def merge!(namespace)
-      @error_level = namespace.error_level
+      @strict_flag = namespace.strict
+      @supress_warnings_flag = namespace.supress_warnings
       @items.merge! namespace.items
     end
 
