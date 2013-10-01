@@ -47,7 +47,7 @@ module Confuse
           end
         else
           define_method(name) do
-            config[namespace][name]
+            config[namespace][name, config]
           end
         end
       end

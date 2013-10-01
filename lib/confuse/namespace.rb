@@ -26,8 +26,13 @@ module Confuse
       @strict_flag = true
     end
 
-    def [](key)
-      (i = get_item(key)) && i.value
+    def [](key, config = nil)
+      value = (i = get_item(key)) && i.value
+      if value.respond_to?(:call) && !config.nil?
+        value.call(config)
+      else
+        value
+      end
     end
 
     def []=(key, value)
@@ -39,7 +44,7 @@ module Confuse
       if @supress_warnings_flag
         puts "Warning: config includes unknown option '#{key}'"
       end
-      @items[key] = ConfigItem.new(key, &(Proc.new {})) unless @strict_flag
+      @items[key] = ConfigItem.new(key, &nil) unless @strict_flag
     end
 
     def get_item(key)

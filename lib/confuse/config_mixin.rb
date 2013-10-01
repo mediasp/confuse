@@ -31,7 +31,7 @@ module Confuse
       rest_of_key = rest_of_key(key, namespace)
       ns = namespaces[namespace]
       return ns unless rest_of_key
-      ns[rest_of_key]
+      ns[rest_of_key, self]
     end
 
     # We allow the namespace and the key to be concatenated with an '_', so this

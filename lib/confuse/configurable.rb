@@ -1,4 +1,4 @@
-require 'configuration'
+require 'confuse'
 
 # Monkey patch class to easily allow a class to be configurable.
 class Class
