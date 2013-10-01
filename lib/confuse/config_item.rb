@@ -1,4 +1,4 @@
-module Configuration
+module Confuse
   # A {ConfigItem} is a class for storing a single piece of config. It has a
   # key, a type, a description, and a default value.
   class ConfigItem

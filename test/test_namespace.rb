@@ -1,9 +1,9 @@
 require 'minitest/autorun'
-require 'configuration'
+require 'confuse'
 
 class TestNamespace < MiniTest::Unit::TestCase
   def setup
-    @namespace = Configuration::Namespace.new do
+    @namespace = Confuse::Namespace.new do
       define :foo do
         default 1
       end
@@ -11,7 +11,7 @@ class TestNamespace < MiniTest::Unit::TestCase
   end
 
   def test_merge!
-    namespace = Configuration::Namespace.new do
+    namespace = Confuse::Namespace.new do
       define :bar do
         default 1
       end

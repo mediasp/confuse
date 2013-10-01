@@ -1,7 +1,7 @@
-require 'configuration/config_mixin'
-require 'configuration/dsl'
+require 'confuse/config_mixin'
+require 'confuse/dsl'
 
-module Configuration
+module Confuse
   # The default module used for configuration.
   module Config
     extend ConfigMixin
@@ -10,7 +10,7 @@ module Configuration
   # Super class for configuration in order to have multiple instances.
   class ConfigBase
     include ConfigMixin
-    extend Configuration::DSL
+    extend DSL
 
     def initialize
       load_namespaces(self.class.namespaces)

@@ -1,15 +1,15 @@
 require 'minitest/autorun'
-require 'configuration'
+require 'confuse'
 
 # Test instance methods
 class TestConfig < MiniTest::Unit::TestCase
   def setup
-    namespace = Configuration::Namespace.new do
+    namespace = Confuse::Namespace.new do
       define :baz do
         default 1
       end
     end
-    @config = Configuration::Config
+    @config = Confuse::Config
     @config.load_namespaces({ :foo_bar => namespace })
   end
 
@@ -34,7 +34,7 @@ class TestConfig < MiniTest::Unit::TestCase
   end
 
   def test_load_namespaces
-    namespace = Configuration::Namespace.new do
+    namespace = Confuse::Namespace.new do
       define :foo do
         default 1
       end

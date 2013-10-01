@@ -1,6 +1,6 @@
-require 'configuration/config_item'
+require 'confuse/config_item'
 
-module Configuration
+module Confuse
   # A {Namespace} is a container to keep configuration data seperate from the
   # rest of the config.
   class Namespace

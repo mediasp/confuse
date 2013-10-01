@@ -1,8 +1,8 @@
-require 'configuration/namespace'
+require 'confuse/namespace'
 require 'inifile'
 require 'yaml'
 
-module Configuration
+module Confuse
   # Mixin for configuration.
   module ConfigMixin
     def namespaces
@@ -10,10 +10,10 @@ module Configuration
     end
 
     def load_namespaces(new_namespaces)
-      new_namespaces.each { |key, value|
-	existing = namespaces[key]
-	existing ? existing.merge!(value) : namespaces[key] = value
-      }
+      new_namespaces.each do |key, value|
+        existing = namespaces[key]
+        existing ? existing.merge!(value) : namespaces[key] = value
+      end
     end
 
     def read_files(file_paths)

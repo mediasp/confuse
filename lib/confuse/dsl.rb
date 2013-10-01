@@ -1,6 +1,6 @@
-require 'configuration/config'
+require 'confuse/config'
 
-module Configuration
+module Confuse
   # DSL for setting up a configurable class
   module DSL
     attr_reader :configured_by
