@@ -20,13 +20,13 @@ module Confuse
       @type
     end
 
-    def default(default = nil)
-      @default = default unless default.nil?
-      @default
+    def default(value = nil, &block)
+      @default_value = value unless value.nil?
+      @default_value = block unless block.nil?
     end
 
     def value
-      @value || @default
+      @value || @default_value
     end
   end
 end
