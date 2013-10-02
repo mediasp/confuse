@@ -1,4 +1,0 @@
-* Make the :type attriute for a config item actually do something. (e.g.some
-    basic type checking)
-* Write some more tests
-* Pick a good name that hasn't already been claimed on rubygems.
