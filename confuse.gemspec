@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Tom Chipchase']
   spec.email         = ['tom@mediasp.com']
   spec.description   = %q{Add nested configuration to an application}
-  spec.summary       = %q{}
-  spec.homepage      = ''
+  spec.summary       = %q{A DSL for defining configuration options in classes}
+  spec.homepage      = 'https://github.com/mediasp/confuse'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($RS)
