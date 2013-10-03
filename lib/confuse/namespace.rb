@@ -40,6 +40,10 @@ module Confuse
       item && item.value = value
     end
 
+    def keys
+      @items.keys
+    end
+
     def create_new_key(key, value)
       if @supress_warnings_flag
         puts "Warning: config includes unknown option '#{key}'"
