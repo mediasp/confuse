@@ -12,9 +12,10 @@ module Confuse
     include ConfigMixin
     extend DSL
 
-    def initialize
+    def initialize(*paths)
       load_namespaces(self.class.namespaces)
       read_files(self.class.config_path)
+      read_files(paths)
     end
 
     def config
