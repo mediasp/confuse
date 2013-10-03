@@ -87,8 +87,9 @@ module Confuse
 
     def mixin_config!(config)
       config.each do |key, value|
-        namespace = @namespaces[find_namespace(key) || :default]
-        if value.respond_to? :keys
+        namespace_name = find_namespace(key) || :default
+        namespace = @namespaces[namespace_name]
+        if value.respond_to?(:keys)
           # if its a hash, set each key in the hash as a config item in the
           # namespace
           value.each do |k, v|
@@ -96,7 +97,7 @@ module Confuse
           end
         else
           # otherwise, set it directly in the namespace
-          namespace[key] = value
+          namespace[rest_of_key(key, namespace_name)] = value
         end
       end
     end
