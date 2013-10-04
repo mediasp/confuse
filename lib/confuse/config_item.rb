@@ -7,7 +7,7 @@ module Confuse
 
     def initialize(name, &block)
       @key = name
-      instance_eval(&block)
+      instance_eval(&block) unless block.nil?
     end
 
     def description(description = nil)

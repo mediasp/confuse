@@ -34,6 +34,15 @@ module Confuse
       ns[rest_of_key, self]
     end
 
+    def to_hash
+      namespaces.reduce({}) do |memo, (name, namespace)|
+        namespace.keys.each do |key|
+          memo["#{name}_#{key}"] = namespace[key, self]
+        end
+        memo
+      end
+    end
+
     # We allow the namespace and the key to be concatenated with an '_', so this
     # method is to search the possible substrings that could make up the
     # namespace for a key.
@@ -78,8 +87,9 @@ module Confuse
 
     def mixin_config!(config)
       config.each do |key, value|
-        namespace = @namespaces[find_namespace(key) || :default]
-        if value.respond_to? :keys
+        namespace_name = find_namespace(key) || :default
+        namespace = @namespaces[namespace_name]
+        if value.respond_to?(:keys)
           # if its a hash, set each key in the hash as a config item in the
           # namespace
           value.each do |k, v|
@@ -87,7 +97,7 @@ module Confuse
           end
         else
           # otherwise, set it directly in the namespace
-          namespace[key] = value
+          namespace[rest_of_key(key, namespace_name)] = value
         end
       end
     end

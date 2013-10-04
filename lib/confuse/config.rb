@@ -14,8 +14,8 @@ module Confuse
 
     def initialize(*paths)
       load_namespaces(self.class.namespaces)
-      read_files(self.class.config_path)
-      read_files(paths)
+      read_files(self.class.config_path.flatten)
+      read_files(paths.flatten)
     end
 
     def config
