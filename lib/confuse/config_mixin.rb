@@ -37,7 +37,7 @@ module Confuse
     def to_hash
       namespaces.reduce({}) do |memo, (name, namespace)|
         namespace.keys.each do |key|
-          memo["#{name}_#{key}"] = namespace[key, self]
+          memo[:"#{name}_#{key}"] = namespace[key, self]
         end
         memo
       end
