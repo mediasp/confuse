@@ -14,8 +14,11 @@ module Confuse
 
     def initialize(*paths)
       load_namespaces(self.class.namespaces)
-      read_files(self.class.config_path.flatten)
-      read_files(paths.flatten)
+      if paths.flatten.empty?
+        read_files(self.class.config_path.flatten)
+      else
+        read_files(paths.flatten)
+      end
     end
 
     def config
