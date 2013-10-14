@@ -25,6 +25,10 @@ module Confuse
       @default_value = block unless block.nil?
     end
 
+    def value=(val)
+      @value = val
+    end
+
     def value
       @value || @default_value
     end

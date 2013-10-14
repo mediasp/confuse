@@ -12,8 +12,17 @@ module Confuse
     include ConfigMixin
     extend DSL
 
-    def initialize(*paths)
-      load_namespaces(self.class.namespaces)
+    def namespaces
+      @namespaces ||= {}
+    end
+
+    def initialize(options = {})
+      load_namespaces(self.class.namespaces.clone)
+      paths = options[:paths] || []
+      load_defaults = begin
+                        d = options[:load_defaults]
+                        d.nil? ? true : d
+                      end
       if paths.flatten.empty?
         read_files(self.class.config_path.flatten)
       else

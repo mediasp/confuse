@@ -12,8 +12,9 @@ module Confuse
     def load_namespaces(new_namespaces)
       new_namespaces.each do |key, value|
         existing = namespaces[key]
-        existing ? existing.merge!(value) : namespaces[key] = value
+        existing ? existing.merge!(value) : namespaces[key] = value.clone
       end
+      @foo = true
     end
 
     def read_files(file_paths)
@@ -35,6 +36,7 @@ module Confuse
     end
 
     def []=(key, value)
+      puts "WARNING: changing config after it has been set!"
       mixin_config!({key => value})
     end
 

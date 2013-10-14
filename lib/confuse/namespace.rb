@@ -9,8 +9,8 @@ module Confuse
 
     def initialize(&block)
       @items = {}
-      @supress_warnings = false
-      @strict = false
+      @supress_warnings_flag = false
+      @strict_flag = false
       instance_eval(&block)
     end
 
@@ -58,7 +58,17 @@ module Confuse
     def merge!(namespace)
       @strict_flag = namespace.strict
       @supress_warnings_flag = namespace.supress_warnings
-      @items.merge! namespace.items
+      @items.merge! namespace.clone.items
+    end
+
+    def clone
+      c = super
+      items = @items.reduce({}) do |m, (k, v)|
+        m[k] = v.clone
+        m
+      end
+      c.instance_variable_set(:"@items", items)
+      c
     end
 
   end
