@@ -19,15 +19,12 @@ module Confuse
     def initialize(options = {})
       load_namespaces(self.class.namespaces.clone)
       paths = options[:paths] || []
-      load_defaults = begin
-                        d = options[:load_defaults]
-                        d.nil? ? true : d
-                      end
       if paths.flatten.empty?
         read_files(self.class.config_path.flatten)
       else
         read_files(paths.flatten)
       end
+      options[:conf].tap { |conf| conf && mixin_config!(conf) }
     end
 
     def config
