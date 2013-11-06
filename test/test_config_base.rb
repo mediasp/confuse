@@ -15,7 +15,7 @@ class TestConfigBase < MiniTest::Unit::TestCase
   def test_params_hash
     assert_equal({ :default_foo  => { :type => :string, :doc => 'foo',
                                       :default => 'foo' } },
-                 Foo.new.params_hash)
+                 Foo.params_hash)
   end
 
   def test_can_specify_config_options_on_initialize

@@ -49,7 +49,7 @@ module Confuse
       end
     end
 
-    def params_hash
+    def self.params_hash
       namespaces.reduce({}) do |memo, (name, namespace)|
         namespace.keys.each do |key|
           item = namespace.get_item(key)

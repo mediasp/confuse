@@ -30,5 +30,19 @@ module Confuse
     def config
       self
     end
+
+    def self.params_hash
+      namespaces.reduce({}) do |memo, (name, namespace)|
+        namespace.keys.each do |key|
+          item = namespace.get_item(key)
+          memo[:"#{name}_#{key}"] = {
+            :type => item.type,
+            :doc => item.description,
+            :default => item.default_value }
+        end
+        memo
+      end
+    end
+
   end
 end
