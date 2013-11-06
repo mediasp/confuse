@@ -4,6 +4,7 @@ module Confuse
   class ConfigItem
     attr_reader :key
     attr_writer :value
+    attr_reader :default_value
 
     def initialize(name, &block)
       @key = name

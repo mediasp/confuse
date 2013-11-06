@@ -36,14 +36,27 @@ module Confuse
     end
 
     def []=(key, value)
-      puts "WARNING: changing config after it has been set!"
-      mixin_config!({key => value})
+      puts 'WARNING: changing config after it has been set!'
+      mixin_config!({ key => value })
     end
 
     def to_hash
       namespaces.reduce({}) do |memo, (name, namespace)|
         namespace.keys.each do |key|
           memo[:"#{name}_#{key}"] = namespace[key, self]
+        end
+        memo
+      end
+    end
+
+    def params_hash
+      namespaces.reduce({}) do |memo, (name, namespace)|
+        namespace.keys.each do |key|
+          item = namespace.get_item(key)
+          memo[:"#{name}_#{key}"] = {
+            :type => item.type,
+            :doc => item.description,
+            :default => item.default_value }
         end
         memo
       end
@@ -98,9 +111,7 @@ module Confuse
         if value.respond_to?(:keys)
           # if its a hash, set each key in the hash as a config item in the
           # namespace
-          value.each do |k, v|
-            namespace[k] = v
-          end
+          value.each { |k, v| namespace[k] = v }
         else
           # otherwise, set it directly in the namespace
           namespace[rest_of_key(key, namespace_name)] = value
