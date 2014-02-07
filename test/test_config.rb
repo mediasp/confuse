@@ -46,5 +46,17 @@ class TestConfig < MiniTest::Unit::TestCase
     assert @config[:foo_bar][:baz]
   end
 
+  def test_to_hash
+    config = Class.new(Confuse::ConfigBase) do
+      define :foo do
+        description 'Foo'
+        type :integer
+        default 1
+      end
+    end
+    assert_nil config.new.to_hash[:default_foo]
+    refute_nil config.new.to_hash[:foo]
+  end
+
 end
 

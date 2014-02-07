@@ -43,20 +43,11 @@ module Confuse
     def to_hash
       namespaces.reduce({}) do |memo, (name, namespace)|
         namespace.keys.each do |key|
-          memo[:"#{name}_#{key}"] = namespace[key, self]
-        end
-        memo
-      end
-    end
-
-    def self.params_hash
-      namespaces.reduce({}) do |memo, (name, namespace)|
-        namespace.keys.each do |key|
-          item = namespace.get_item(key)
-          memo[:"#{name}_#{key}"] = {
-            :type => item.type,
-            :doc => item.description,
-            :default => item.default_value }
+          if name != :default
+            memo[:"#{name}_#{key}"] = namespace[key, self]
+          else
+            memo[:"#{key}"] = namespace[key, self]
+          end
         end
         memo
       end
