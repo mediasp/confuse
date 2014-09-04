@@ -1,62 +1,45 @@
+# coding: utf-8
+
 require 'minitest/autorun'
-require 'confuse'
 
-# Test instance methods
 class TestConfig < MiniTest::Unit::TestCase
+  def definition
+    @definition ||= Confuse.define do |conf|
+      conf.add_item :foo
+      conf.add_item :bar, :default => 'default'
+      conf.add_item :baz, :required => true
+    end
+  end
+
+  def source
+    @source ||= Class.new do
+      def [](namespace, key)
+        'foo' if key == :foo
+      end
+    end.new
+  end
+
   def setup
-    namespace = Confuse::Namespace.new do
-      define :baz do
-        default 1
-      end
-    end
-    @config = Confuse::Config
-    @config.load_namespaces({ :foo_bar => namespace })
+    @config = Confuse::Config.new(definition, source)
   end
 
-  def test_find_namespace
-    assert_equal :foo_bar, @config.find_namespace(:foo_bar_baz)
+  # gets a value from the source if it is defined, and in the source
+  def test_get_value_from_source
+    assert_equal 'foo', @config.foo
   end
 
-  def test_fine_namespace_no_sub_key
-    assert_equal :foo_bar, @config.find_namespace(:foo_bar)
+  # returns the default value if the source returns nil
+  def test_get_default_from_definition
+    assert_equal 'default', @config.bar
   end
 
-  def test_find_namespace_doesnt_exist
-    assert_equal nil, @config.find_namespace(:bar)
+  # raises undefined if an item hasn't been set, and has no default
+  def test_get_default_from_definition
+    assert_nil @config.buz
   end
 
-  def test_rest_of_key
-    assert_equal :bar, @config.rest_of_key(:foo_bar, :foo)
+  # raises an error if any items are required and don't have defaults
+  def test_check
+    assert_raises(Confuse::Errors::Undefined) { @config.check }
   end
-
-  def test_rest_of_key_default_namespace
-    assert_equal :bar, @config.rest_of_key(:bar, :default)
-  end
-
-  def test_load_namespaces
-    namespace = Confuse::Namespace.new do
-      define :foo do
-        default 1
-      end
-    end
-
-    @config.load_namespaces({ :foo_bar => namespace })
-
-    assert @config[:foo_bar][:foo]
-    assert @config[:foo_bar][:baz]
-  end
-
-  def test_to_hash
-    config = Class.new(Confuse::ConfigBase) do
-      define :foo do
-        description 'Foo'
-        type :integer
-        default 1
-      end
-    end
-    assert_nil config.new.to_hash[:default_foo]
-    refute_nil config.new.to_hash[:foo]
-  end
-
 end
-

@@ -1,48 +1,37 @@
-require 'confuse/config_mixin'
-require 'confuse/dsl'
+# coding: utf-8
 
 module Confuse
-  # The default module used for configuration.
-  module Config
-    extend ConfigMixin
-  end
-
-  # Super class for configuration in order to have multiple instances.
-  class ConfigBase
-    include ConfigMixin
-    extend DSL
-
-    def namespaces
-      @namespaces ||= {}
+  class Config
+    def initialize(definition, source)
+      @definition = definition
+      @source = source
     end
 
-    def initialize(options = {})
-      load_namespaces(self.class.namespaces.clone)
-      paths = options[:paths] || []
-      if paths.flatten.empty?
-        read_files(self.class.config_path.flatten)
-      else
-        read_files(paths.flatten)
-      end
-      options[:conf].tap { |conf| conf && mixin_config!(conf) }
+    def respond_to?(name)
+      @definition.defines?(name) || super
     end
 
-    def config
-      self
+    def method_missing(name, *_args)
+      self[name] if respond_to?(name)
     end
 
-    def self.params_hash
-      namespaces.reduce({}) do |memo, (name, namespace)|
-        namespace.keys.each do |key|
-          item = namespace.get_item(key)
-          memo[:"#{name}_#{key}"] = {
-            :type => item.type,
-            :doc => item.description,
-            :default => item.default_value }
+    def [](name)
+      namespace, key = @definition.namespace_and_key(name)
+      lookup(namespace, key)
+    end
+
+    def lookup(namespace, key)
+      @source[namespace, key] || @definition.default(namespace, key)
+    end
+
+    # check items have a value. Will raise Undefined error if a required item
+    # has no value.
+    def check
+      @definition.namespaces.each do |(namespace, ns)|
+        ns.items.each do |key, _|
+          lookup(namespace, key)
         end
-        memo
       end
     end
-
   end
 end
