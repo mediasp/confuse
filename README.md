@@ -21,22 +21,25 @@ Or install it yourself as:
 
 ## Usage
 
-Basic usage:
+# Basic usage
 
     config = Confuse.config do |conf|
-      conf.add_item :foo, :description => 'Foo', :default => 1
+      conf.add_item :foo
     end
 
     config[:foo]
+
+or
+
     config.foo
 
-Types:
+# Sources
 
 You can choose where and your config is stored by passing a :path variable to
 Confuse.config:
 
     config = Confuse.config :path => 'config.ini' do |conf|
-      conf.add_item :foo, :description => 'Foo', :default => 1
+      conf.add_item :foo
     end
 
 Confuse will attempt to work out the type of file from the extension (Supports
@@ -44,30 +47,45 @@ Confuse will attempt to work out the type of file from the extension (Supports
 passing in a :type option:
 
     config = Confuse.config :path => 'foo.conf' :type => :yaml do |conf|
-      conf.add_item :foo, :description => 'Foo', :default => 1
+      conf.add_item :foo
     end
 
 If no type or path is given, it will default to environment variables.
+Environment variables have an an extra option, which is the ability to provide
+a prefix:
 
-Environment variables have one extra feature, which is the ability to provide a
-prefix:
-
-
-    config = Confuse.config :prefix => 'FOO' :type => :yaml do |conf|
-      conf.add_item :foo, :description => 'Foo', :default => 1
+    config = Confuse.config :prefix => 'FOO' do |conf|
+      conf.add_item :foo
     end
 
 This means Confuse will lookup environment varialbles with that prefix with an
 underscore followed by the configuration name. If none is given, it will lookup
 environment variables as is.
 
-Namespaces:
+# Defaults
+
+You can give a config item a default value, which will be used in cases where
+none is set in the source.
+
+    config = Confuse.config do |conf|
+      conf.add_item :foo, :default => 1
+    end
+
+This can also be a proc that takes the config as an argument. This allows you
+to set a value based on what another item is set to.
+
+    config = Confuse.config do |conf|
+      conf.add_item :foo, :default => 'foo'
+      conf.add_item :bar, :default => proc { |c| "#{c.foo}_bar" }
+    end
+
+# Namespaces
 
 You can separate your configuration into different namespaces:
 
     config = Confuse.config :type => :env do |conf|
       conf.add_namespace :foo do |ns|
-        ns.add_item :foo, :description => 'Foo', :default => 1
+        ns.add_item :foo
       end
     end
 
@@ -81,13 +99,13 @@ Or a method call:
 
 However, beware of adding an item at the top level with the same name.
 
-Check:
+# Check
 
 If you want to make sure all your configuration items are in place before
 running the program you can call .check on it.
 
     config = Confuse.config do |conf|
-      conf.add_item :foo, :description => 'Foo', :default => 1
+      conf.add_item :foo
     end
 
     config.check
@@ -96,7 +114,7 @@ If any of the items haven't been set, and don't have a default value, an
 exception will be thrown. If you don't care about certain variables, you can
 pass :required => false to them (or give them a default value).
 
-Use a different source:
+# Use a different source
 
 If you want to use a source that isn't an ini file or yaml file, or environment
 variable. It is very easy to create your own one. It simply needs to be a class
