@@ -8,5 +8,7 @@ module Confuse
         super
       end
     end
+
+    class Invalid < StandardError; end
   end
 end

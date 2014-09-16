@@ -2,11 +2,12 @@
 
 class TestItem < MiniTest::Unit::TestCase
   def setup
-    @item = Confuse::Item.new(:foo, :default => 1, :description => 'Description')
+    @item = Confuse::Item.new(:foo, :default => 1,
+                                    :description => 'Description')
   end
 
   def test_sets_the_default_value
-    assert_equal 1, @item.default
+    assert_equal 1, @item.default(nil)
   end
 
   def test_sets_the_description
@@ -16,6 +17,18 @@ class TestItem < MiniTest::Unit::TestCase
   def test_required_item
     item = Confuse::Item.new(:foo, :description => 'required!',
                                    :required => true)
-    assert_raises(Confuse::Errors::Undefined) { item.default }
+    assert_raises(Confuse::Errors::Undefined) { item.default(nil) }
+  end
+
+  def test_proc_as_default
+    mock_conf = Class.new do
+      def bar
+        'bar'
+      end
+    end.new
+
+    item = Confuse::Item.new(:foo, :default => proc { |c| c.bar })
+
+    assert_equal 'bar', item.default(mock_conf)
   end
 end

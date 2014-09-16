@@ -99,6 +99,41 @@ Or a method call:
 
 However, beware of adding an item at the top level with the same name.
 
+# Types
+
+You can specify the type of a configuration item.
+
+    config = Confuse.config do |conf|
+      conf.add_item :foo, :type => Fixnum
+    end
+
+This will ensure that any value is converted to the correct class when asked
+for, or an error raised if it is the wrong type and it can't be converted.
+
+If a default is given, the type will be derived from the class of the default,
+unless the default is a Proc.
+
+The following types are supported:
+- String
+- Fixnum
+- Float
+- Array
+- :bool (a special case, because TrueClass and FalseClass do not share a unique
+    common ancestor.)
+
+Arrays can be used in sources that don't support arrays by supplying a comma
+separated list.
+
+If you wish to add support for another type, or even custom types. You can
+register your own types if you wish:
+
+    Confuse::Converter.register <type> do |item|
+      ...
+    end
+
+The type can be anything, but it can only be derived from the default if a
+class is used.
+
 # Check
 
 If you want to make sure all your configuration items are in place before
@@ -110,9 +145,10 @@ running the program you can call .check on it.
 
     config.check
 
-If any of the items haven't been set, and don't have a default value, an
-exception will be thrown. If you don't care about certain variables, you can
-pass :required => false to them (or give them a default value).
+If any of the items haven't been set, and don't have a default value, or if an
+item is the incorrect type, an exception will be thrown. If you don't care about
+certain variables, you can pass :required => false to them (or give them a
+default value).
 
 # Use a different source
 

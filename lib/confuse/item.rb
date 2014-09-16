@@ -6,15 +6,51 @@ module Confuse
     def initialize(key, opts = {})
       @key = key
       @default, @description = opts.values_at(:default, :description)
+
+      @converter = opts[:converter]
+      @type = opts[:type]
+
       @required = opts.key?(:required) ? opts[:required] : true
     end
 
-    attr_reader :description, :required
+    attr_reader :description, :required, :converter
 
-    def default
-      res = @default
-      raise Errors::Undefined.new(@key) if @required && !res
-      res
+    def convert(value)
+      converter.call(value)
+    end
+
+    def default(config)
+      raise Errors::Undefined.new(@key) if @required && !@default
+
+      res = if @default.respond_to?(:call)
+              @default.call(config)
+            else
+              @default
+            end
+    end
+
+    private
+
+    def type
+      @type || type_from_default || String
+    end
+
+    def type_from_default
+      if @default
+        klass = @default.class
+        case @default
+        when TrueClass, FalseClass
+          :bool
+        when Proc
+          String
+        else
+          @default.class
+        end
+      end
+    end
+
+    def converter
+      @converter ||= Converter[type]
     end
   end
 end

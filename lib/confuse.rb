@@ -8,6 +8,7 @@ require 'confuse/item'
 require 'confuse/definition'
 require 'confuse/namespace'
 require 'confuse/source'
+require 'confuse/converter'
 require 'confuse/errors'
 
 # Top level namespace for confuse gem

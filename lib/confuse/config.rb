@@ -21,7 +21,13 @@ module Confuse
     end
 
     def lookup(namespace, key)
-      @source[namespace, key] || @definition.default(namespace, key, self)
+      unless (item = @definition.find_item(namespace, key))
+        raise Errors::Undefined.new(key)
+      end
+
+      value = @source[namespace, key] || item.default(self)
+
+      item.convert(value)
     end
 
     # check items have a value. Will raise Undefined error if a required item

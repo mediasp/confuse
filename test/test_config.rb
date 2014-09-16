@@ -35,7 +35,7 @@ class TestConfig < MiniTest::Unit::TestCase
 
   # raises undefined if an item hasn't been set, and has no default
   def test_get_default_from_definition
-    assert_nil @config.buz
+    assert_raises(Confuse::Errors::Undefined) { @config.buz }
   end
 
   # raises an error if any items are required and don't have defaults
