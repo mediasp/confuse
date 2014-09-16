@@ -11,8 +11,14 @@ module Confuse
       !!find_item_by_name(name)
     end
 
-    def default(namespace, key)
-      (item = find_item(namespace, key)) && item.default
+    def default(namespace, key, config)
+      default = (item = find_item(namespace, key)) && item.default
+
+      if default.respond_to?(:call)
+        default.call(config)
+      else
+        default
+      end
     end
 
     def add_namespace(name, &block)

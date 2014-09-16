@@ -21,7 +21,7 @@ module Confuse
     end
 
     def lookup(namespace, key)
-      @source[namespace, key] || @definition.default(namespace, key)
+      @source[namespace, key] || @definition.default(namespace, key, self)
     end
 
     # check items have a value. Will raise Undefined error if a required item

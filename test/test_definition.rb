@@ -8,7 +8,16 @@ module Confuse
         d.add_namespace :bar do |n|
           n.add_item(:foo, :default => 1, :description => 'test')
         end
+        d.add_item :baz, :default => proc { |c| c.foo }
       end
+    end
+
+    def source
+      @source ||= Confuse.source
+    end
+
+    def config
+      @config ||= Confuse::Config.new(@definition, source)
     end
 
     # can define a configuration item
@@ -22,11 +31,15 @@ module Confuse
     end
 
     def test_default
-      assert_equal 1, @definition.default(nil, :foo)
+      assert_equal 1, @definition.default(nil, :foo, nil)
     end
 
     def test_default_for_namespaced_item
-      assert_equal 1, @definition.default(:bar, :foo)
+      assert_equal 1, @definition.default(:bar, :foo, nil)
+    end
+
+    def test_default_with_proc
+      assert_equal 1, @definition.default(nil, :baz, config)
     end
   end
 end

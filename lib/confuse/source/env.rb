@@ -8,7 +8,7 @@ module Confuse
       end
 
       def [](namespace, key)
-        lookup = key
+        lookup = key.to_s
         lookup = prepend(namespace, lookup) if namespace
         lookup = prepend(@prefix, lookup) if @prefix
 
