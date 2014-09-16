@@ -6,7 +6,8 @@ module Confuse
   class Namespace
     attr_reader :items
 
-    def initialize(&block)
+    def initialize(name, &block)
+      @name = name
       @items = {}
       block.call(self) if block_given?
     end
@@ -17,6 +18,13 @@ module Confuse
 
     def [](key)
       @items[key]
+    end
+
+    def to_hash
+      @items.reduce({}) do |a, (k,v)|
+        key = @name ? :"#{@name}_#{k}" : k
+        a.merge({ key => v.to_hash })
+      end
     end
   end
 end

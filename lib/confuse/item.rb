@@ -29,6 +29,22 @@ module Confuse
             end
     end
 
+    def to_s
+      default = if @default && !@default.respond_to?(:call)
+                  "default: #{@default}"
+                else
+                  ''
+                end
+      "#{@key}:\t#{description} #{default}"
+    end
+
+    def to_hash
+      {
+        :description => @description,
+        :default => @default
+      }
+    end
+
     private
 
     def type

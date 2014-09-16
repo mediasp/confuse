@@ -31,4 +31,9 @@ class TestItem < MiniTest::Unit::TestCase
 
     assert_equal 'bar', item.default(mock_conf)
   end
+
+  def test_to_hash
+    assert_equal({ :description => 'Description', :default => 1 },
+                 @item.to_hash)
+  end
 end

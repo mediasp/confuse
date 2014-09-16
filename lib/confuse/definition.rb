@@ -12,7 +12,7 @@ module Confuse
     end
 
     def add_namespace(name, &block)
-      new_namespace = Namespace.new(&block)
+      new_namespace = Namespace.new(name, &block)
       namespaces[name.to_sym] = new_namespace
     end
 
@@ -22,7 +22,7 @@ module Confuse
 
     def namespaces
       @namespaces ||= {
-        @default_namespace => Namespace.new(&(Proc.new {}))
+        @default_namespace => Namespace.new(nil, &(Proc.new {}))
       }
     end
 
@@ -33,6 +33,10 @@ module Confuse
 
     def find_item(namespace, key)
       (ns = find_namespace(namespace)) && ns[key]
+    end
+
+    def to_hash
+      @namespaces.reduce({}) { |a, (_k, v)| a.merge(v) }
     end
 
     private

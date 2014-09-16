@@ -1,7 +1,7 @@
 # coding: utf-8
 
 module Confuse
-  class Converter
+  module Converter
     class << self
       def converters
         @converters ||= { }

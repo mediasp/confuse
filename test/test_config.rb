@@ -42,4 +42,18 @@ class TestConfig < MiniTest::Unit::TestCase
   def test_check
     assert_raises(Confuse::Errors::Undefined) { @config.check }
   end
+
+  def test_to_hash
+    config = Confuse.config do |conf|
+      conf.add_item :foo, :description => 'foo', :default => 1
+      conf.add_namespace :bar do |ns|
+        ns.add_item :baz, :description => 'bar_baz', :default => 2
+      end
+    end
+
+    assert_equal(
+      { :foo => { :description => 'foo', :default => 1, :value => 1 },
+        :bar_baz => { :description => 'bar_baz', :default => 2, :value => 2 } },
+      config.to_hash)
+  end
 end

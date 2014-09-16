@@ -28,5 +28,12 @@ module Confuse
     def test_define_namespace
       assert @definition.defines? :bar_foo
     end
+
+    def test_to_hash
+      assert_equal(
+        { :foo => { :description => nil, :default => 1 },
+          :bar_foo => { :description => 'test', :default => 1 } },
+        @definition.to_hash)
+    end
   end
 end

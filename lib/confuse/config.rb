@@ -39,5 +39,12 @@ module Confuse
         end
       end
     end
+
+    def to_hash
+      @definition.to_hash.reduce({}) do |a, (k, v)|
+        value_added = v.merge(:value => self[k])
+        a.merge({ k => value_added })
+      end
+    end
   end
 end
