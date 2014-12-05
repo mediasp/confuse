@@ -36,4 +36,10 @@ class TestItem < MiniTest::Unit::TestCase
     assert_equal({ :description => 'Description', :default => 1 },
                  @item.to_hash)
   end
+
+  def test_default_false
+    item = Confuse::Item.new(:foo, :default => false)
+
+    assert_equal false, item.convert('false')
+  end
 end

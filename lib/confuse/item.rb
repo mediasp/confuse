@@ -20,13 +20,9 @@ module Confuse
     end
 
     def default(config)
-      raise Errors::Undefined.new(@key) if @required && !@default
+      raise Errors::Undefined.new(@key) if @required && @default.nil?
 
-      res = if @default.respond_to?(:call)
-              @default.call(config)
-            else
-              @default
-            end
+      @default.respond_to?(:call) ? @default.call(config) : @default
     end
 
     def to_s
@@ -52,8 +48,7 @@ module Confuse
     end
 
     def type_from_default
-      if @default
-        klass = @default.class
+      unless @default.nil?
         case @default
         when TrueClass, FalseClass
           :bool
