@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.summary       = 'A DSL for defining configuration options in classes'
   spec.homepage      = 'https://github.com/mediasp/confuse'
   spec.license       = 'MIT'
+  spec.required_ruby_version = '>= 1.9.0'
 
   spec.files         = `git ls-files`.split($RS)
   spec.executables   = spec.files.grep(/^bin/) { |f| File.basename(f) }
