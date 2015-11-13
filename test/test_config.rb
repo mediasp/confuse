@@ -6,14 +6,14 @@ class TestConfig < MiniTest::Unit::TestCase
   def definition
     @definition ||= Confuse.define do |conf|
       conf.add_item :foo
-      conf.add_item :bar, :default => 'default'
-      conf.add_item :baz, :required => true
+      conf.add_item :bar, default: 'default'
+      conf.add_item :baz, required: true
     end
   end
 
   def source
     @source ||= Class.new do
-      def [](namespace, key)
+      def [](_namespace, key)
         'foo' if key == :foo
       end
     end.new
@@ -45,15 +45,15 @@ class TestConfig < MiniTest::Unit::TestCase
 
   def test_to_hash
     config = Confuse.config do |conf|
-      conf.add_item :foo, :description => 'foo', :default => 1
+      conf.add_item :foo, description: 'foo', default: 1
       conf.add_namespace :bar do |ns|
-        ns.add_item :baz, :description => 'bar_baz', :default => 2
+        ns.add_item :baz, description: 'bar_baz', default: 2
       end
     end
 
     assert_equal(
-      { :foo => { :description => 'foo', :default => 1, :value => 1 },
-        :bar_baz => { :description => 'bar_baz', :default => 2, :value => 2 } },
+      { foo: { description: 'foo', default: 1, value: 1 },
+        bar_baz: { description: 'bar_baz', default: 2, value: 2 } },
       config.to_hash)
   end
 end

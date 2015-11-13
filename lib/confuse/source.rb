@@ -4,15 +4,13 @@ module Confuse
   module Source
     class << self
       def types
-        @types ||= { }
+        @types ||= {}
       end
 
       def create(options = {})
         path = options[:path]
 
-        type = if path
-                 path[path.rindex('.') + 1, path.length].to_sym
-               end
+        type = (path[path.rindex('.') + 1, path.length].to_sym if path)
         type ||= options[:type]
 
         if type

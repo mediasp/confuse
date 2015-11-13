@@ -21,9 +21,9 @@ module Confuse
     end
 
     def to_hash
-      @items.reduce({}) do |a, (k,v)|
+      @items.reduce({}) do |a, (k, v)|
         key = @name ? :"#{@name}_#{k}" : k
-        a.merge({ key => v.to_hash })
+        a.merge(key => v.to_hash)
       end
     end
   end

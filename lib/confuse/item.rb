@@ -20,7 +20,7 @@ module Confuse
     end
 
     def default(config)
-      raise Errors::Undefined.new(@key) if @required && @default.nil?
+      fail Errors::Undefined.new(@key) if @required && @default.nil?
 
       @default.respond_to?(:call) ? @default.call(config) : @default
     end
@@ -36,8 +36,8 @@ module Confuse
 
     def to_hash
       {
-        :description => @description,
-        :default => @default
+        description: @description,
+        default: @default
       }
     end
 

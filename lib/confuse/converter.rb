@@ -4,7 +4,7 @@ module Confuse
   module Converter
     class << self
       def converters
-        @converters ||= { }
+        @converters ||= {}
       end
 
       def register(key, &block)
@@ -16,20 +16,20 @@ module Confuse
       end
     end
 
-    register(String) { |item| item.to_s }
+    register(String, &:to_s)
 
     register Fixnum do |item|
-      raise Errors::Invalid unless /^\d*$/.match item.to_s
+      fail Errors::Invalid unless /^\d*$/.match item.to_s
       item.to_i
     end
 
     register Float do |item|
-      raise Errors::Invalid unless /^\d*(\.\d*)?$/.match item.to_s
+      fail Errors::Invalid unless /^\d*(\.\d*)?$/.match item.to_s
       item.to_f
     end
 
     register :bool do |item|
-      raise Errors::Invalid unless %w(true false).include? item.to_s
+      fail Errors::Invalid unless %w(true false).include? item.to_s
       item.to_s == 'true'
     end
 
@@ -39,7 +39,7 @@ module Confuse
       elsif item.include? ','
         item.split(',')
       else
-        raise Errors::Invalid
+        fail Errors::Invalid
       end
     end
   end

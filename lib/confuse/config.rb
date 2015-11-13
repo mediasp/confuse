@@ -22,7 +22,7 @@ module Confuse
 
     def lookup(namespace, key)
       unless (item = @definition.find_item(namespace, key))
-        raise Errors::Undefined.new(key)
+        fail Errors::Undefined.new(key)
       end
 
       value = @source[namespace, key] || item.default(self)
@@ -42,8 +42,8 @@ module Confuse
 
     def to_hash
       @definition.to_hash.reduce({}) do |a, (k, v)|
-        value_added = v.merge(:value => self[k])
-        a.merge({ k => value_added })
+        value_added = v.merge(value: self[k])
+        a.merge(k => value_added)
       end
     end
   end

@@ -22,12 +22,12 @@ module Confuse
 
     def namespaces
       @namespaces ||= {
-        @default_namespace => Namespace.new(nil, &(Proc.new {}))
+        @default_namespace => Namespace.new(nil, &(proc {}))
       }
     end
 
     def namespace_and_key(name)
-      KeySplitter.new(name).split.find { |(ns, _)| namespaces[ns]  } ||
+      KeySplitter.new(name).split.find { |(ns, _)| namespaces[ns] } ||
         [nil, name]
     end
 

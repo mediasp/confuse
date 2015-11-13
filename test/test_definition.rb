@@ -4,9 +4,9 @@ module Confuse
   class TestDefinition < MiniTest::Unit::TestCase
     def setup
       @definition = Confuse::Definition.new do |d|
-        d.add_item :foo, :default => 1
+        d.add_item :foo, default: 1
         d.add_namespace :bar do |n|
-          n.add_item(:foo, :default => 1, :description => 'test')
+          n.add_item(:foo, default: 1, description: 'test')
         end
       end
     end
@@ -31,8 +31,8 @@ module Confuse
 
     def test_to_hash
       assert_equal(
-        { :foo => { :description => nil, :default => 1 },
-          :bar_foo => { :description => 'test', :default => 1 } },
+        { foo: { description: nil, default: 1 },
+          bar_foo: { description: 'test', default: 1 } },
         @definition.to_hash)
     end
   end

@@ -25,4 +25,3 @@ module Confuse
     register(:env, Env)
   end
 end
-
